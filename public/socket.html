@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+    <body>
+        <h1>Testing Websockets</h1>
+        <input type="text" id="textArea">
+        <button id="testSndBtn">send</button>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            const socket=io();
+            const buttonID=document.getElementById('testSndBtn');
+            const textID=document.getElementById('textArea');
+            buttonID.addEventListener('click',()=>{
+                message=textID.value;
+                socket.emit('client-message',message);
+            })
+            socket.on('message',()=>console.log(message));
+        </script>
+    </body>
+</html>
