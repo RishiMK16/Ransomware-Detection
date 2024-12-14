@@ -1,8 +1,10 @@
 /node_modules
 /python_codes/encryption_test.py
-/websockets/node_modules
+
 ransomx_with_payload.csv
 D:\CODES\Projects\Ransomware_Desktop\ransomx_with_payload.csv
 /package-lock.json
-/websockets/package-lock.json
+
 /out
+/websockets-test/node_modules
+/websockets-test/package-lock.json
