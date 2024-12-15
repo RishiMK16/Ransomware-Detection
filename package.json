@@ -14,7 +14,9 @@
   "dependencies": {
     "electron-squirrel-startup": "^1.0.1",
     "express": "^4.21.0",
-    "nodemon": "^3.1.7"
+    "nodemon": "^3.1.7",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.5.0",
