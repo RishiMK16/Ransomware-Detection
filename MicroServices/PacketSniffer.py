@@ -3,7 +3,7 @@ from scapy.all import sniff
 import threading
 from gevent import pywsgi
 from geventwebsocket.handler import WebSocketHandler
-
+ 
 # Create a Socket.IO server with gevent as the async mode
 sio = socketio.Server(async_mode="gevent", cors_allowed_origins="*")  # Allow connections from any origin
 app = socketio.WSGIApp(sio)  # Wrap the server in a WSGI app

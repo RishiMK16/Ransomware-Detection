@@ -3,14 +3,36 @@ const app=express()
 const {Server}=require("socket.io")
 const {io}=require("socket.io-client")
 const {toImgarray}=require('D:\\CODES\\Projects\\Ransomware_Desktop\\MicroServices\\controller\\packet_preprocessing.js')
+const http=require('http');
 
-const socket=new io("http://localhost:3333")
 
-socket.on("connect",()=>{
+//CLIENT
+const socketClient=new io("http://localhost:3333")
+
+socketClient.on("connect",()=>{
     console.log("connected to sniffer server");
 })
 
-socket.on('packet_data',(packet)=>{
-    hex_code=packet["payload"]
-    console.log(toImgarray(hex_code))
+
+//SERVER
+app.get('/health',(req,res)=>{
+    res.send({'health':"healthy"})
+})
+const server=http.createServer(app)
+const ws=new Server(server)
+
+ws.on('connection',(socket)=>{
+    console.log("connected to AI instance of id : ",socket.id)
+
+    socketClient.on('packet_data',(packet)=>{
+        hex_code=packet["payload"]
+        socket.emit('image_array',toImgarray(hex_code))
+    })
+
+})
+
+
+
+server.listen(3334,()=>{
+    console.log("listening on port 3334")
 })

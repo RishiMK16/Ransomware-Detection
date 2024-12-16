@@ -9,7 +9,7 @@ l=[]
 for(let i=0;i<100;i++){
    l[i]=i 
 }
-l=[]
+l=[] 
 for(let i=0;i<1000;i++){
     l[i]=i;
 }
@@ -30,11 +30,10 @@ ws.on("connection",(socket)=>{
             socket.emit('servermessage',l[i])
         }
     })
-
-    
     socket.on('more-message',(mess)=>{
         console.log(mess);
     })
-
 })
+
+
 server.listen(3000,()=>console.log('listening on port 3000'))
