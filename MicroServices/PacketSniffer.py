@@ -1,25 +1,21 @@
 import socketio
 from scapy.all import sniff
-import eventlet
 import threading
+from gevent import pywsgi
+from geventwebsocket.handler import WebSocketHandler
 
-# Create a Socket.IO server
-sio = socketio.Server(cors_allowed_origins="*")  # Allow connections from any origin
+# Create a Socket.IO server with gevent as the async mode
+sio = socketio.Server(async_mode="gevent", cors_allowed_origins="*")  # Allow connections from any origin
 app = socketio.WSGIApp(sio)  # Wrap the server in a WSGI app
 
 # Function to capture and send packets
 def packet_callback(packet):
-    if packet.haslayer('TCP'):
+    if packet.haslayer('TCP') and packet['TCP'].payload:
         src_port = packet['TCP'].sport
         dst_port = packet['TCP'].dport
-
-
         payload = bytes(packet['TCP'].payload)
         payload_hex = payload.hex()
-
-        #print(f"Source Port: {src_port}, Destination Port: {dst_port}")
-        #print(f"Payload (Hex): {payload_hex}")
-
+        print(f"Emitting packet data: src_port={src_port}, dst_port={dst_port}, payload={payload_hex}")
         # Broadcast packet payload to all connected clients
         sio.emit("packet_data", {"src_port": src_port, "dst_port": dst_port, "payload": payload_hex})
 
@@ -39,15 +35,7 @@ def connect(sid, environ):
 def disconnect(sid):
     print(f"Client disconnected: {sid}")
 
-
-
 # Run the server
 if __name__ == "__main__":
-    
-
-    # Run the sniffing function in a separate thread
-
-
-    # Run the Socket.IO server
     print("Starting Socket.IO server...")
-    eventlet.wsgi.server(eventlet.listen(("localhost", 3333)), app)
+    pywsgi.WSGIServer(("localhost", 3333), app, handler_class=WebSocketHandler).serve_forever()

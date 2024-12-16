@@ -12,5 +12,5 @@ socket.on("connect",()=>{
 
 socket.on('packet_data',(packet)=>{
     hex_code=packet["payload"]
-    socket.emit('preprocessed_payload',toImgarray(hex_code));
+    console.log(toImgarray(hex_code))
 })
