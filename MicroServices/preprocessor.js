@@ -29,6 +29,14 @@ ws.on('connection',(socket)=>{
         socket.emit('image_array',toImgarray(hex_code))
     })
 
+    socket.on("prediction",(pred)=>{
+        console.log(pred)
+    })
+
+    socket.on("AI_response",(message)=>{
+        console.log(message)
+    })
+
 })
 
 

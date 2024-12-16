@@ -1,4 +1,4 @@
-const {data}=require('D:\\CODES\\Projects\\Ransomware_Desktop\\MicroServices\\TokensLoader.js');
+const {data}=require('./TokensLoader.js');
 
 function preprocess_payload(l){
     if(l.length<784){

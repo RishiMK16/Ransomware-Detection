@@ -1,0 +1,2 @@
+use cv2.imread("bro.png", cv2.IMREAD_GRAYSCALE) to read each image
+convert the array into float32 before training
