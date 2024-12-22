@@ -35,6 +35,10 @@ def connect(sid, environ):
 def disconnect(sid):
     print(f"Client disconnected: {sid}")
 
+@sio.on("block")
+def block(booleanval):
+    if(booleanval==True):
+        print("blocked")
 # Run the server
 if __name__ == "__main__":
     print("Starting Socket.IO server...")

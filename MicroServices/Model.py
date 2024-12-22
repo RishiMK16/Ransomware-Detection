@@ -27,6 +27,7 @@ def image_array(packet):
         time.sleep(2)
         sio.emit('prediction','true')
         l=[]
+        
 
 
 sio.connect('http://localhost:3334')

@@ -1,4 +1,7 @@
 const {data}=require('./TokensLoader.js');
+const {Redis}=require('ioredis');
+
+const client=new Redis();
 
 function preprocess_payload(l){
     if(l.length<784){
@@ -59,4 +62,14 @@ function toImgarray(string){
 }
 
 
-module.exports={toImgarray}
+const mq_queue=async(packet)=>{
+    await client.lpush("test_queue",packet);
+}
+
+const mq_pop=async()=>{
+    let array=await client.rpop("test_queue")
+    console.log(array);
+}
+
+
+module.exports={toImgarray,push:mq_queue,pop:mq_pop}

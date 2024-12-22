@@ -2,7 +2,7 @@ const express=require('express')
 const app=express()
 const {Server}=require("socket.io")
 const {io}=require("socket.io-client")
-const {toImgarray}=require('D:\\CODES\\Projects\\Ransomware_Desktop\\MicroServices\\controller\\packet_preprocessing.js')
+const {toImgarray,push,pop}=require('D:\\CODES\\Projects\\Ransomware_Desktop\\MicroServices\\controller\\packet_preprocessing.js')
 const http=require('http');
 
 
@@ -26,11 +26,16 @@ ws.on('connection',(socket)=>{
 
     socketClient.on('packet_data',(packet)=>{
         hex_code=packet["payload"]
-        socket.emit('image_array',toImgarray(hex_code))
+        array=toImgarray(hex_code)
+        push(array);
+        //socket.emit('image_array',toImgarray(hex_code))
     })
 
     socket.on("prediction",(pred)=>{
-        console.log(pred)
+        if(pred==='true'){
+            socketClient.emit('block',true);
+            socket.emit('image_array',pop())
+        }
     })
 
     socket.on("AI_response",(message)=>{
