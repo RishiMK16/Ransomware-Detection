@@ -36,8 +36,8 @@ model=CNNRNN3()
 model.load_state_dict(torch.load(model_path)) 
 model.eval()
 
-image_path = r"D:\DATASETS\ransomware\CNN_dataset\Goodware\goodware_13.png"
-image = Image.open(image_path).convert("RGB")
+image_path1 = r"D:\DATASETS\ransomware\CNN_dataset\Ransomware\RansomwareAleta_10.png"
+image = Image.open(image_path1).convert("RGB")
 
 transform = transforms.Compose([
     transforms.Grayscale(num_output_channels=1),

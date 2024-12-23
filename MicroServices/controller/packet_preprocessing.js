@@ -58,7 +58,7 @@ function reshapeTo3D(array, rows, cols, depth) {
 function toImgarray(string){
     l=tokenize(string)
     arr=preprocess_payload(l)
-    return reshapeTo3D(arr,28,28,1)
+    return arr
 }
 
 

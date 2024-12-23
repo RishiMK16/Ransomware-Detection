@@ -4,6 +4,9 @@ const {Server}=require("socket.io")
 const {io}=require("socket.io-client")
 const {toImgarray,push,pop}=require('D:\\CODES\\Projects\\Ransomware_Desktop\\MicroServices\\controller\\packet_preprocessing.js')
 const http=require('http');
+const {Redis}=require('ioredis');
+
+const client=new Redis()
 
 
 //CLIENT
@@ -24,22 +27,29 @@ const ws=new Server(server)
 ws.on('connection',(socket)=>{
     console.log("connected to AI instance of id : ",socket.id)
 
-    socketClient.on('packet_data',(packet)=>{
+    socketClient.on('packet_data',async(packet)=>{
         hex_code=packet["payload"]
         array=toImgarray(hex_code)
-        push(array);
-        //socket.emit('image_array',toImgarray(hex_code))
+        const serializedArray = JSON.stringify(array);
+        await client.lpush("test_queue",serializedArray);
+        
     })
 
-    socket.on("prediction",(pred)=>{
-        if(pred==='true'){
-            socketClient.emit('block',true);
-            socket.emit('image_array',pop())
+    socket.on("AI_resp",async(resp)=>{
+        if(resp==="True"){
+            x=await client.rpop('test_queue');
+            socket.emit('image_array',{ payload: x })
         }
     })
 
-    socket.on("AI_response",(message)=>{
-        console.log(message)
+    
+
+    socket.on('prediction',(pred)=>{
+        if(pred===1){
+            socketClient.emit('block',"True")
+        }else{
+            socketClient.emit('block',"False");
+        }
     })
 
 })

@@ -11,13 +11,15 @@ app = socketio.WSGIApp(sio)  # Wrap the server in a WSGI app
 # Function to capture and send packets
 def packet_callback(packet):
     if packet.haslayer('TCP') and packet['TCP'].payload:
+        #s_IP=packet['TCP'].sip
         src_port = packet['TCP'].sport
         dst_port = packet['TCP'].dport
         payload = bytes(packet['TCP'].payload)
-        payload_hex = payload.hex()
-        print(f"Emitting packet data: src_port={src_port}, dst_port={dst_port}, payload={payload_hex}")
-        # Broadcast packet payload to all connected clients
-        sio.emit("packet_data", {"src_port": src_port, "dst_port": dst_port, "payload": payload_hex})
+        if(payload!=None):
+            payload_hex = payload.hex()
+            #print(f"Emitting packet data: src_port={src_port}, dst_port={dst_port}, payload={payload_hex}")
+            # Broadcast packet payload to all connected clients
+            sio.emit("packet_data", {"src_port": src_port, "dst_port": dst_port, "payload": payload_hex})
 
 # Start sniffing packets on the specified interface
 def start_sniffing():
@@ -36,9 +38,11 @@ def disconnect(sid):
     print(f"Client disconnected: {sid}")
 
 @sio.on("block")
-def block(booleanval):
-    if(booleanval==True):
-        print("blocked")
+def block(sid,booleanval):
+    if(booleanval=="True"):
+        print("Ransomware Detected")
+    else:
+        print("Safe traffic")
 # Run the server
 if __name__ == "__main__":
     print("Starting Socket.IO server...")
